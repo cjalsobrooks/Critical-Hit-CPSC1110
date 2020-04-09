@@ -1,0 +1,106 @@
+package ProjectFiles;
+
+//@author Gabriel Pell
+
+import java.util.Random;
+
+public class Generate
+{
+    Random rand = new Random();
+    //Easy, Medium, and Hard modes
+    public static int[] easyDice()
+            {
+                Random rand = new Random(); // find a better place for this, the same line is here four times
+                int[] stats = new int[6]; 
+                int totalRoll = 0;
+                int roll;
+                int lowRoll = 6;
+                int lowRoll2 = 6;
+                for(int i = 0; i < stats.length;  i++)
+                {
+                    totalRoll = 0;
+                    for(int j = 0; j < 5; j++)
+                    {
+                        roll = rand.nextInt(6) + 1;
+                        totalRoll = totalRoll + roll;
+                        
+                        if(roll < lowRoll)
+                        {
+                            lowRoll = roll;
+                        }
+                        else if(roll < lowRoll2)  
+                        {
+                            lowRoll2 = roll;
+                        }
+                        
+                    }
+                    stats[i] = (totalRoll - lowRoll - lowRoll2 + (rand.nextInt(3) + 1));
+                    lowRoll = 6;
+                    lowRoll2 = 6;
+                }
+                
+                return stats;
+            }
+    
+    public static int[] mediumDice()
+            {
+                Random rand = new Random(); // find a better place for this, the same line is here four times
+                int[] stats = new int[6]; 
+                int totalRoll = 0;
+                int roll;
+                int lowRoll = 6;
+                int lowRoll2 = 6;
+                for(int i = 0; i < stats.length;  i++)
+                {
+                    totalRoll = 0;
+                    for(int j = 0; j < 5; j++)
+                    {
+                        roll = rand.nextInt(6) + 1;
+                        totalRoll = totalRoll + roll;
+                        
+                        if(roll < lowRoll)
+                        {
+                            lowRoll = roll;
+                        }
+                        else if(roll < lowRoll2)  
+                        {
+                            lowRoll2 = roll;
+                        }
+                        
+                    }
+                    stats[i] = (totalRoll - lowRoll - lowRoll2);
+                    lowRoll = 6;
+                    lowRoll2 = 6;
+                }
+                
+                return stats;
+            }
+    
+    public static int[] hardDice()
+            {
+                Random rand = new Random(); // find a better place for this, the same line is here four times
+                int[] stats = new int[6]; 
+                int totalRoll = 0;
+                int roll;
+                for(int i = 0; i < stats.length;  i++)
+                {
+                    totalRoll = 0;
+                    for(int j = 0; j < 3; j++)
+                    {
+                        roll = rand.nextInt(6) + 1;
+                        totalRoll = totalRoll + roll; 
+                        
+                    }
+                    stats[i] = totalRoll;
+                }
+                
+                return stats;
+            }
+    
+    public static int generateCharacteristic(int min, int max)
+    {
+        Random rand = new Random(); // find a better place for this, the same line is here four times
+        int characteristic = rand.nextInt(max-min) + min;
+        return characteristic;
+    }
+}
