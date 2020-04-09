@@ -1,0 +1,169 @@
+package ProjectFiles;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
+/**
+ * @author cjals
+ * @version 3/4/20
+ *
+ * GUI for login system
+ */
+public class Login implements ActionListener
+{
+
+    private static JLabel userLabel;
+    private static JTextField userText;
+    private static JLabel passwordLabel;
+    private static JPasswordField passText;
+    private static JButton button;
+    private static JButton newAccountButton;
+    private static JLabel success;
+    private static JButton submit;
+    private static JTextField passTextOne;
+    private static JTextField passTextTwo;
+    private static JPanel newAccountPanel;
+
+        
+        public static void login() {
+        JPanel panel = new JPanel();
+
+        JFrame frame = new JFrame();
+        frame.setSize(500, 500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.add(panel);
+
+        panel.setLayout(null);
+
+        userLabel = new JLabel("User");
+        userLabel.setBounds(10, 20, 80, 25);
+        panel.add(userLabel);
+
+        userText = new JTextField(20);
+        userText.setBounds(100, 20, 165, 25);
+        panel.add(userText);
+
+        passwordLabel = new JLabel("Password");
+        passwordLabel.setBounds(10, 50, 80, 25);
+        panel.add(passwordLabel);
+
+        passText = new JPasswordField(20);
+        passText.setBounds(100, 50, 165, 25);
+        panel.add(passText);
+
+        button = new JButton("Login");
+        button.setBounds(10, 80, 80, 25);
+        button.addActionListener(new Login());
+        panel.add(button);
+
+        newAccountButton = new JButton("Create Account");
+        newAccountButton.setBounds(100, 80, 150, 25);
+        newAccountButton.addActionListener(new Login() );
+        panel.add(newAccountButton);
+
+
+        success = new JLabel("");
+        success.setBounds(10, 110, 300, 25);
+        panel.add(success);
+
+    }
+
+
+    /**
+     * create a new user account
+     */
+    public static void createAccount()
+    {
+
+        newAccountPanel = new JPanel();
+
+        JFrame frame = new JFrame();
+        frame.setSize(100, 100);
+        frame.setDefaultCloseOperation(3);
+        frame.setVisible(true);
+        frame.add(newAccountPanel);
+
+        newAccountPanel.setLayout(null);
+
+        JLabel username = new JLabel("Username: ");
+        username.setBounds(10, 20, 120, 25);
+        newAccountPanel.add(username);
+
+        JLabel password = new JLabel("Password: ");
+        password.setBounds(10, 50, 120, 25);
+        newAccountPanel.add(password);
+
+        JLabel confirmPass = new JLabel("Confirm Password: ");
+        confirmPass.setBounds(10, 80, 120, 25);
+        newAccountPanel.add(confirmPass);
+
+        JLabel email = new JLabel("Email: ");
+        email.setBounds(10, 110, 120, 25);
+        newAccountPanel.add(email);
+
+        JTextField userText = new JTextField(20);
+        userText.setBounds(125, 20, 150, 25);
+        newAccountPanel.add(userText);
+
+        passTextOne = new JTextField(20);
+        passTextOne.setBounds(125, 50, 150, 25);
+        newAccountPanel.add(passTextOne);
+
+        passTextTwo = new JTextField(20);
+        passTextTwo.setBounds(125, 80, 150, 25);
+        newAccountPanel.add(passTextTwo);
+
+        JTextField emailField = new JTextField(20);
+        emailField.setBounds(125, 110, 150, 25);
+        newAccountPanel.add(emailField);
+
+        submit = new JButton("Submit");
+        submit.setBounds(50, 140, 150, 25);
+        submit.addActionListener(new Login());
+        newAccountPanel.add(submit);
+
+        success = new JLabel("");
+        success.setBounds(38, 170, 180, 25);
+        newAccountPanel.add(success);
+
+
+    }
+
+    /**
+     * action performed on any button
+     * @param e click event
+     */
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == button)
+        {
+            String user = userText.getText();
+            String password = passText.getText();
+            if (user.equals("Clara") && password.equals("password")) {
+                success.setText("Login successful");
+                
+            } else {
+                success.setText("Incorrect username or password");
+            }
+        }
+        else if (e.getSource() == newAccountButton)
+        {
+            Login.createAccount();
+        }
+        else if (e.getSource() == submit)
+        {
+            if (passTextOne.getText().equals(passTextTwo.getText()))
+            {
+                success.setText("Successful account creation.");
+                Login.login();
+            }
+            else
+            {
+                success.setText("Passwords do not match.");
+            }
+        }
+    }
+}
