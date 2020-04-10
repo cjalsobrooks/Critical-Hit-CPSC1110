@@ -1,0 +1,225 @@
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author cjals
+ */
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
+public class StatAssignment implements ActionListener
+{
+    private static int[] statValues;
+    private static int[] finalStats = new int[6];
+    private static boolean clicked = false;
+    private static JComboBox<Integer> statList1;
+    private static JComboBox<Integer> statList2;
+    private static JComboBox<Integer> statList3;
+    private static JComboBox<Integer> statList4;
+    private static JComboBox<Integer> statList5;
+    private static JComboBox<Integer> statList6;
+    private static JLabel statConfirmation;
+    
+    public static int[] assignStats(int[] stats)
+    { 
+        while (!clicked)
+        {
+            statValues = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                statValues[i] = stats[i];
+            }
+
+            JFrame frame = new JFrame();
+            frame.setBounds(100, 100, 500, 500);
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            frame.setVisible(true);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(null);
+            frame.add(panel);
+
+            JLabel prompt = new JLabel("Choose where to assign your stats: ");
+            prompt.setBounds(50, 15, 400, 25);
+            panel.add(prompt);
+
+            JLabel con = new JLabel("Constitution: ");
+            con.setBounds(50, 50, 125, 20);
+            panel.add(con);
+
+            JLabel str = new JLabel("Strength: ");
+            str.setBounds(50, 75, 125, 20);
+            panel.add(str);
+
+            JLabel dex = new JLabel("Dexterity: ");
+            dex.setBounds(50, 100, 125, 20);
+            panel.add(dex);
+
+            JLabel intel = new JLabel("Intelligence: ");
+            intel.setBounds(50, 125, 125 ,20);
+            panel.add(intel);
+
+            JLabel wis = new JLabel("Wisdom: ");
+            wis.setBounds(50, 150, 125, 20);
+            panel.add(wis);
+
+            JLabel cha = new JLabel("Charisma: ");
+            cha.setBounds(50, 175, 125, 20);
+            panel.add(cha);
+
+            /*
+            menu 1
+             */
+            statList1 = new JComboBox<>();
+            statList1.addItem(0);
+            statList1.setBounds(175,50,40, 20);
+            panel.add(statList1);
+
+            for (int i = 0; i < 6; i++)
+            {
+                statList1.addItem(stats[i]);
+            }
+
+            /*
+            menu 2
+             */
+            statList2 = new JComboBox<>();
+            statList2.addItem(0);
+            statList2.setBounds(175,75,40, 20);
+            panel.add(statList2);
+
+            for (int i = 0; i < 6; i++)
+            {
+                statList2.addItem(stats[i]);
+            }
+
+
+            /*
+            menu 3
+             */
+            statList3 = new JComboBox<>();
+            statList3.addItem(0);
+            statList3.setBounds(175,100,40, 20);
+            panel.add(statList3);
+
+            for (int i = 0; i < 6; i++)
+            {
+                statList3.addItem(stats[i]);
+            }
+
+
+            /*
+            menu 4
+             */
+            statList4 = new JComboBox<>();
+            statList4.addItem(0);
+            statList4.setBounds(175,125,40, 20);
+            panel.add(statList4);
+
+            for (int i = 0; i < 6; i++)
+            {
+                statList4.addItem(stats[i]);
+            }
+
+
+            /*
+            menu 5
+             */
+            statList5 = new JComboBox<>();
+            statList5.addItem(0);
+            statList5.setBounds(175,150,40, 20);
+            panel.add(statList5);
+
+            for (int i = 0; i < 6; i++)
+            {
+                statList5.addItem(stats[i]);
+            }
+
+
+            /*
+            menu 6 -- its the final menuuuuu.... dundundun duuuun... dundundun dundun.... --
+             */
+            statList6 = new JComboBox<>();
+            statList6.addItem(0);
+            statList6.setBounds(175,175,40, 20);
+            panel.add(statList6);
+
+            for (int i = 0; i < 6; i++)
+            {
+                statList6.addItem(stats[i]);
+            }
+
+
+            JButton confirm = new JButton("Confirm");
+            confirm.setBounds(90, 200, 100, 20);
+            confirm.addActionListener(new StatAssignment());
+            panel.add(confirm);
+
+            statConfirmation = new JLabel("");
+            statConfirmation.setBounds(40, 225, 300, 20);
+            panel.add(statConfirmation);
+
+
+        }
+        
+        return finalStats;
+    }
+
+  
+ 
+    
+                
+    
+    
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        int constitution = statList1.getSelectedIndex();
+
+        int strength = statList2.getSelectedIndex();
+
+        int dexterity = statList3.getSelectedIndex();
+
+        int intelligence = statList4.getSelectedIndex();
+
+        int wisdom = statList5.getSelectedIndex();
+
+        int charisma = statList6.getSelectedIndex();
+
+        int[] statChoices = {constitution, strength, dexterity, intelligence, wisdom, charisma};
+
+        if (ArrayTools.contains(statChoices, 0))
+        {
+            statConfirmation.setText("Please choose a value for every stat.");
+        }
+        else
+        {
+            if (ArrayTools.checkDuplicates(statChoices))
+            {
+                statConfirmation.setText("Please assign a different value to each stat.");
+            }
+            else
+            {
+                
+                for (int i = 0; i < statChoices.length; i++)
+                {
+                    finalStats[i] = statValues[statChoices[i]-1];
+                }
+
+                statConfirmation.setText("Stats confirmed.");
+                clicked = true;
+
+            }
+           }       
+        
+    }
+}
+
+
