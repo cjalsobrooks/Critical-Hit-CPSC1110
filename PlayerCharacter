@@ -1,0 +1,182 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ProjectFiles;
+
+/**
+ *
+ * @author Nick
+ */
+
+public class PlayerCharacter {
+    private String name;
+    private char gender;
+    private Race myRace;
+    private int age;
+    private int height;
+    private int weight;
+    private String alignment;
+    private String characterClass;
+    private int[] generatedStats = new int[6];
+    private int[] modifiedStats = new int[6];
+    
+    PlayerCharacter(String name, char gender, Race chosenRace, String alignment, String characterClass, int generationType)
+    {
+        this.name = name;
+        this.gender = gender;
+        myRace = chosenRace;
+        this.alignment = alignment;
+        this.characterClass = characterClass;
+        
+        int[] statArray = new int[6];
+        
+        switch(generationType)
+        {
+            case 1:
+            {
+               statArray = Generate.easyDice();
+            }
+            case 2:
+            {
+                statArray = Generate.mediumDice();
+            }
+            case 3:
+            {
+                statArray = Generate.hardDice();
+            }
+        }
+        
+        for (int i = 0; i<6; i++)
+            {
+                 modifiedStats[i] = statArray[i] + myRace.getStatModifier(i);                  
+            }
+        
+        setAge(chosenRace);
+        setWeight(gender);
+        setHeight(gender);
+    }
+    
+    public void changeName(String name)
+    {
+        this.name = name;
+    }
+    
+    public String getName()
+    {
+        return name;
+    }
+    
+    public void changeGender(char gender)
+    {
+        this.gender = gender;
+    }
+    
+    public char getGender()
+    {
+        return gender;
+    }
+    
+    public void changeRace(Race race)
+    {
+        myRace = race;
+        for (int i = 0; i<6; i++)
+        {
+            modifiedStats[i] = generatedStats[i] + myRace.getStatModifier(i);
+        }
+    }
+    
+    public void setAge(Race chosenRace)
+    {
+        myRace = chosenRace;
+        this.age = Generate.generateValue(chosenRace.getAgeBoundary(0), chosenRace.getAgeBoundary(1));
+    }
+    
+    public int getAge()
+    {
+        return age;
+    }
+    
+    public void setHeight(char gender)
+    {
+        if (gender == 'M')
+        {
+            this.height = Generate.generateValue(myRace.getHeightBoundary(0,0), myRace.getHeightBoundary(0,1));
+        }
+        else
+        {
+            this.height = Generate.generateValue(myRace.getHeightBoundary(1,0), myRace.getHeightBoundary(1,1));
+        }
+    }
+    
+    public int getHeight()
+    {
+        return height;
+    }
+    
+    public void setWeight(char gender)
+    {
+        if (gender == 'M')
+        {
+            this.weight = Generate.generateValue(myRace.getWeightBoundary(0,0), myRace.getWeightBoundary(0,1));
+        }
+        else
+        {
+            this.weight = Generate.generateValue(myRace.getWeightBoundary(1,0), myRace.getWeightBoundary(1,1));
+        }
+    }
+    
+    public int getWeight()
+    {
+        return weight;
+    }
+    
+    public void changeAlignment(String alignment)
+    {
+        this.alignment = alignment;
+    }
+    
+    public String getAlignment()
+    {
+        return alignment;
+    }
+    
+    public void changeCharacterClass(String characterClass)
+    {
+        this.characterClass = characterClass;
+    }
+    
+    public String getCharacterClass()
+    {
+        return characterClass;
+    }
+    
+    public int[] getModifiedStats()
+    {
+        return modifiedStats;
+    }
+    
+    public int[] getGeneratedStats()
+    {
+        return generatedStats;
+    }
+    
+    public void displayGeneratedStats()
+    {
+        for (int i = 0; i<6; i++)
+        {
+            System.out.print(generatedStats[i] + " ");
+        }
+        System.out.println();
+    }
+    
+    public void displayModifiedStats()
+    {
+        for (int i = 0; i<6; i++)
+        {
+            System.out.print(modifiedStats[i]+ " ");
+        }
+        System.out.println();
+    }
+}
