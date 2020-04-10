@@ -1,0 +1,104 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ProjectFiles;
+
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.File;
+
+public class FileUserAccount {
+    
+    //Loading the Users
+    private String projectPath;
+    private String userAccounts;
+    
+    ArrayList users = new ArrayList();  
+    
+    public FileUserAccount(String projectPath) throws FileNotFoundException
+    {
+        this.projectPath = projectPath;
+        this.userAccounts = (projectPath + "\\userAccounts.txt");
+        
+        File inputFile1 = new File(userAccounts);
+        Scanner input = new Scanner(inputFile1);
+        
+        while (input.hasNextLine()) { 
+            users.add(input.nextLine());
+        }
+    }
+    
+    public int getListLength() {
+       return (users.size());
+    }
+    
+    public void addAccount(UserAccount account) throws FileNotFoundException {
+        String AccountString = account.getUsername() +" "+ account.getPassword() +" "+ account.getEmail()+" ";
+        users.add(AccountString); 
+        saveUserAccounts();
+    }
+    
+     public ArrayList getCharacterList(UserAccount user) {
+        int AccountStringIndex = getAccountIndex(user);
+        String accountString = (String) this.users.get(AccountStringIndex);
+        
+        ArrayList userArray = Parser.parseString(accountString);
+        ArrayList characterList = new ArrayList();
+        
+        for (int i = 0; i < (userArray.size()-3); i++) {
+            characterList.add(userArray.get(i+3));
+        }
+        return characterList;
+    }
+    
+    public UserAccount getAccount(int AccountStringIndex) {
+        String accountString = (String) users.get(AccountStringIndex);
+        ArrayList userArray = Parser.parseString(accountString);
+        UserAccount storedUser = new UserAccount(((String) userArray.get(0)), ((String) userArray.get(1)), ((String) userArray.get(2)));
+        return storedUser;   
+    }
+    
+    public boolean saveUserAccounts() throws FileNotFoundException
+    {
+        PrintWriter outfile = new PrintWriter(userAccounts);
+       
+        if (users.size() > 0) {
+            for (int i =0;i < users.size();i++) {
+                outfile.println((String) users.get(i));
+            }
+            outfile.close();
+            return true;
+        }   
+        else {
+            return false; 
+        }
+    }
+    
+    public void addCharacter(UserAccount currentUser, String characterName) {
+        int AccountStringIndex = getAccountIndex(currentUser);
+        String oldString = ((String) this.users.get(AccountStringIndex));
+        
+        String newString = (oldString + characterName + " ");
+        users.remove(AccountStringIndex);
+        users.add(newString);
+    }
+    
+    public int getAccountIndex(UserAccount user) {
+        String username = user.getUsername();
+        
+        for (int i = 0; i < users.size(); i++) {
+            String accountString = (String) users.get(i);
+            ArrayList userArray = Parser.parseString(accountString);
+            if ((username.compareTo((String) userArray.get(0))) == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+
