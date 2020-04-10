@@ -1,0 +1,152 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ProjectFiles;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
+/**
+ *
+ * @author cjals
+ */
+public class CreateCharacter implements ActionListener 
+{
+    private final static Race HUMAN = new Race(new int[] {15, 30}, new int[][] {{54, 89}, {52, 79}}, new int[][] {{90, 260}, {75, 200}}, new int[] {0,0,0,0,0,0});
+    private final static Race ELF = new Race(new int[] {80, 180}, new int[][] {{48, 66}, {44, 64}}, new int[][] {{70, 130}, {65, 100}}, new int[] {0,2,-2,2,0,0});
+    private final static Race DWARF = new Race(new int[] {40, 70}, new int[][] {{48, 58}, {44, 55}}, new int[][] {{150, 230}, {125, 180}}, new int[] {2,0,2,0,0,-2});
+    private final static Race GNOME = new Race(new int[] {30, 60}, new int[][] {{30, 41}, {28, 39}}, new int[][] {{40, 60}, {35, 55}}, new int[] {-2,2,2,0,0,0});
+    private final static Race HALFLING = new Race(new int[] {30, 50}, new int[][] {{38, 51}, {35, 49}}, new int[][] {{40, 60}, {35, 55}}, new int[] {-2,2,0,0,2,0});
+    
+    private final static Race[] RACES = {HUMAN, ELF, DWARF, GNOME, HALFLING};
+    private final static String[] RACE_NAMES = {"Human", "Elf", "Dwarf", "Gnome", "Halfling"};
+    private final static String[] ALIGNMENTS = {"Lawful Good", "Neutral Good", "Chaotic Good", "Lawful Neutral", "True Neutral", 
+                                            "Chaotic Neutral", "Lawful Evil", "Neutral Evil", "Chaotic Evil"};
+    
+    private static String charName;
+    private static int generationType;
+    private static char chosenGender;
+    private static String chosenAlignment;
+    private static Race selectedRace;
+    
+    private static JFrame frame;
+    
+    public static void createNewCharacter() 
+    {
+        frame = new JFrame();
+        frame.setSize(500,500);
+        frame.setDefaultCloseOperation(3);
+        frame.setVisible(true);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        frame.add(panel);
+        
+        JLabel name = new JLabel("Character Name: ");
+        name.setBounds(20, 10, 150, 25);
+        panel.add(name);
+        
+        JTextField enterName = new JTextField();
+        enterName.setBounds(185, 10, 150, 25);
+        panel.add(enterName);
+        
+        JLabel gender = new JLabel ("Character Gender: ");
+        gender.setBounds(20, 50, 150, 25);
+        panel.add(gender);
+        
+        JButton male = new JButton("Male");
+        male.setBounds(185, 50, 100, 25);
+        panel.add(male);
+        male.addActionListener(e ->
+        {
+            chosenGender = 'M';
+        });
+        
+        JButton female = new JButton("Female");
+        female.setBounds(295, 50, 100, 25);
+        panel.add(female);
+        
+        JLabel race = new JLabel("Character Race: ");
+        race.setBounds(20, 90, 150, 25);
+        panel.add(race);
+        female.addActionListener(e ->
+                {
+                   chosenGender = 'F'; 
+                });
+        
+        JComboBox selectRace = new JComboBox();
+        for (int i = 0; i < 5; i++)
+        {
+            selectRace.addItem(RACE_NAMES[i]);
+        }
+        selectRace.setBounds(185, 90, 150, 25);
+        panel.add(selectRace);
+        
+        JLabel alignment = new JLabel("Choose Alignment: ");
+        alignment.setBounds(20, 130, 150, 25);
+        panel.add(alignment);
+        
+        JComboBox selectAlignment = new JComboBox();
+        for (int i = 0; i < 9; i++)
+        {
+            selectAlignment.addItem(ALIGNMENTS[i]);
+        }
+        selectAlignment.setBounds(185, 130, 150, 25);
+        panel.add(selectAlignment);
+        
+        JLabel statGenerate = new JLabel("Which method would you like to generate stats with?");
+        statGenerate.setBounds(20, 170, 300, 25);
+        panel.add(statGenerate);
+        
+        JButton statEasy = new JButton("Easy");
+        statEasy.setBounds(20, 210, 95, 25);
+        panel.add(statEasy);
+        statEasy.addActionListener(e ->
+            {
+                generationType = 1;
+            });
+        
+        JButton statMed = new JButton("Medium");
+        statMed.setBounds(120, 210, 95, 25);
+        panel.add(statMed);
+        statMed.addActionListener(e ->
+            {
+                generationType = 2;
+            });
+        
+        JButton statHard = new JButton("Hard");
+        statHard.setBounds(220, 210, 95, 25);
+        panel.add(statHard);
+        statHard.addActionListener(e ->
+            {
+                generationType = 3;
+            });
+        
+        JButton confirm = new JButton("Confirm");
+        confirm.setBounds(66, 250, 220, 25);
+        panel.add(confirm);
+        confirm.addActionListener(e -> 
+            {
+                charName = enterName.getText();
+                selectedRace = RACES[selectRace.getSelectedIndex()];
+                chosenAlignment = ALIGNMENTS[selectAlignment.getSelectedIndex()];
+                
+                
+            });
+        
+        
+   
+        
+        
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        
+    }
+    
+}
