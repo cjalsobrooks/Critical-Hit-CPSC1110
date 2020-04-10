@@ -1,0 +1,205 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ProjectFiles;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+/**
+ *
+ * @author Conner Fulford
+ */
+public class FileCharacter {
+     
+    //Saving the users
+    private String projectPath;
+    private String userAccountPath;
+    private String characterFilePath;
+    
+    ArrayList characterList = new ArrayList(); 
+    
+    public FileCharacter(String projectPath) {
+        this.projectPath = projectPath;
+    } 
+
+    
+    public void loadFromFile(PlayerCharacter character) throws FileNotFoundException {
+        
+        File inputFile = new File(characterFilePath);
+        Scanner input = new Scanner(inputFile);
+        
+        characterList.clear();
+        
+        int i = 0;
+        while (input.hasNextLine()) { 
+            characterList.add(input.nextLine());
+            i++;
+        }
+        
+        String[] parsedStringArray = new String[15];
+        
+        int j = 0;
+        while (input.hasNextLine()) { 
+            parsedStringArray[i] = Parser.parseEquals((String) characterList.get(j));
+            j++;
+        }
+        
+        String name = parsedStringArray[1];
+        char gender = (parsedStringArray[2].charAt(0));
+        
+                ArrayList raceInfo = Parser.parseString(parsedStringArray[3]);
+                String raceName = (String) raceInfo.get(0);
+                
+                int raceAge[] = new int[2];
+                raceAge[0] = Integer.parseInt((String) raceInfo.get(1));
+                raceAge[1] = Integer.parseInt((String) raceInfo.get(2));  
+                
+                int raceHeight[][] = new int[2][2];
+                raceHeight[0][0] = Integer.parseInt((String) raceInfo.get(3)); 
+                raceHeight[1][0] = Integer.parseInt((String) raceInfo.get(4)); 
+                raceHeight[0][1] = Integer.parseInt((String) raceInfo.get(5)); 
+                raceHeight[1][1] = Integer.parseInt((String) raceInfo.get(6)); 
+                
+                int raceWeight[][] = new int[2][2];
+                raceWeight[0][0] = Integer.parseInt((String) raceInfo.get(7));        
+                raceWeight[1][0] = Integer.parseInt((String) raceInfo.get(8)); 
+                raceWeight[0][1] = Integer.parseInt((String) raceInfo.get(9)); 
+                raceWeight[1][1] = Integer.parseInt((String) raceInfo.get(10)); 
+                        
+                int raceStats[] = new int[6];    
+                raceStats[0] = Integer.parseInt((String) raceInfo.get(11)); 
+                raceStats[1] = Integer.parseInt((String) raceInfo.get(12)); 
+                raceStats[2] = Integer.parseInt((String) raceInfo.get(13)); 
+                raceStats[3] = Integer.parseInt((String) raceInfo.get(14)); 
+                raceStats[4] = Integer.parseInt((String) raceInfo.get(15)); 
+                raceStats[5] = Integer.parseInt((String) raceInfo.get(16)); 
+        
+            Race characterRace = new Race(raceName, raceAge, raceHeight, raceWeight, raceStats);
+                
+        int age = Integer.parseInt(parsedStringArray[4]);
+        int height = Integer.parseInt(parsedStringArray[5]);        
+        int weight = Integer.parseInt(parsedStringArray[6]);
+        String alignment = parsedStringArray[7];
+        String characterClass = parsedStringArray[8];
+        
+        int[] generatedStats = new int[6];
+            generatedStats[0] = Integer.parseInt(parsedStringArray[9]);
+            generatedStats[1] = Integer.parseInt(parsedStringArray[10]);
+            generatedStats[2] = Integer.parseInt(parsedStringArray[11]);
+            generatedStats[3] = Integer.parseInt(parsedStringArray[12]);
+            generatedStats[4] = Integer.parseInt(parsedStringArray[13]);
+            generatedStats[5] = Integer.parseInt(parsedStringArray[14]);
+        int characterStage = Integer.parseInt(parsedStringArray[15]);       
+                
+        
+        character.setName(name);
+        character.setGender(gender);
+        character.setRace(characterRace);
+        character.setAge(age);
+        character.setHeight(height);
+        character.setWeight(weight);
+        character.setAlignment(alignment);
+        character.setCharacterClass(characterClass);
+        character.setGeneratedStats(generatedStats);
+        character.setCharacterStage(characterStage);
+        
+    }
+    
+    public void updateFromMemory(PlayerCharacter character) throws FileNotFoundException {
+        characterList.clear();
+        characterList.add("Name="+character.getName());
+        characterList.add("Gender="+character.getGender());
+        
+            Race characterRace = character.getRace();
+                String raceName = characterRace.getName();
+                int aryRaceInfo[] = new int[16];
+                aryRaceInfo[0] = characterRace.getAgeBoundary(0);
+                aryRaceInfo[1] = characterRace.getAgeBoundary(1);   
+                
+                aryRaceInfo[2] = characterRace.getHeightBoundary(0,0);
+                aryRaceInfo[3] = characterRace.getHeightBoundary(1,0);
+                aryRaceInfo[4] = characterRace.getHeightBoundary(0,1);
+                aryRaceInfo[5] = characterRace.getHeightBoundary(1,1);
+                        
+                aryRaceInfo[6] = characterRace.getWeightBoundary(0,0);       
+                aryRaceInfo[7] = characterRace.getWeightBoundary(1,0);
+                aryRaceInfo[8] = characterRace.getWeightBoundary(0,1);
+                aryRaceInfo[9] = characterRace.getWeightBoundary(1,1);
+                        
+                aryRaceInfo[10] = characterRace.getStatModifier(0);
+                aryRaceInfo[11] = characterRace.getStatModifier(1);
+                aryRaceInfo[12] = characterRace.getStatModifier(2);
+                aryRaceInfo[13] = characterRace.getStatModifier(3);
+                aryRaceInfo[14] = characterRace.getStatModifier(4);
+                aryRaceInfo[15] = characterRace.getStatModifier(5);
+                String strRaceInfo = raceName;
+                for (int i = 0; i < 16; i++)
+                {
+                    strRaceInfo = (strRaceInfo+" "+aryRaceInfo[i]);
+                }
+                
+                        
+        characterList.add("Race="+strRaceInfo); 
+        
+        characterList.add("Age="+character.getAge());
+        characterList.add("Height="+character.getHeight());
+        characterList.add("Weight="+character.getWeight());
+        characterList.add("Alignment="+character.getAlignment());
+        characterList.add("Class="+character.getCharacterClass());
+       
+            int[] characterArray = character.getGeneratedStats();
+        characterList.add("STR="+characterArray[0]);
+        characterList.add("CON="+characterArray[1]);
+        characterList.add("DEX="+characterArray[2]);
+        characterList.add("INT="+characterArray[3]);
+        characterList.add("WIS="+characterArray[4]);
+        characterList.add("CHA="+characterArray[5]);
+       
+        characterList.add("CharacterStage="+character.getCharacterStage());
+        saveToFile();
+    }
+    
+    public void saveToFile() throws FileNotFoundException {
+        PrintWriter outfile = new PrintWriter(characterFilePath);
+        
+         for (int i = 0;i < characterList.size();i++) {
+                outfile.println((String) characterList.get(i));
+            }
+            outfile.close();
+    }
+    
+    public void getFilePath(UserAccount currentUser, PlayerCharacter character) {
+        String dummyPath = (projectPath+"users\\"+currentUser.getUsername()+"\\"+(character.getName())+".txt");
+        File dummyFile = new File(dummyPath);
+        
+        if (dummyFile.exists()) {
+            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
+            characterFilePath = (userAccountPath +"\\"+ (character.getName())+".txt");
+        } else {
+            dummyFile.mkdirs();
+            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
+            characterFilePath = (userAccountPath +"\\"+ (character.getName())+".txt");
+        }
+    }
+    
+    public void getFilePath(UserAccount currentUser, String characterName) {
+        String dummyPath = (projectPath+"users\\"+currentUser.getUsername()+"\\"+characterName+".txt");
+        File dummyFile = new File(dummyPath);
+        
+        if (dummyFile.exists()) {
+            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
+            characterFilePath = (userAccountPath +"\\"+ characterName+".txt");
+        } else {
+            dummyFile.mkdirs();
+            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
+            characterFilePath = (userAccountPath +"\\"+ characterName+".txt");
+        }
+    }
+    
+}
+
