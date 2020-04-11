@@ -1,0 +1,77 @@
+public class SortTools
+{
+    /**
+     * quicksort an int array
+     * @param array int array to be sorted
+     */
+    public static void quickSort(int[] array)
+    {
+        sort(array, 0, array.length - 1);
+    }
+
+    /**
+     * sorter
+     * @param array array to be sorted
+     * @param left index of left side start
+     * @param right index of right side end
+     */
+    public static void sort(int[] array, int left, int right)
+    {
+        if (left >= right)
+        {
+            return;
+        }
+
+        int pivot = array[(left + right) / 2];
+        int index = partition(array, left, right, pivot);
+        sort(array, left, index - 1);
+        sort(array, index, right);
+    }
+
+    /**
+     * splits array
+     * @param array array to be split
+     * @param left left pointer index
+     * @param right right pointer index
+     * @param pivot pivot element
+     * @return cant remember
+     */
+    public static int partition(int[] array, int left, int right, int pivot)
+    {
+        while (left <= right)
+        {
+            while (array[left] < pivot)
+            {
+                left++;
+            }
+
+            while (array[right] > pivot)
+            {
+                right--;
+            }
+
+            if (left <= right)
+            {
+                swap(array, left, right);
+                left++;
+                right--;
+            }
+        }
+
+        return left;
+    }
+
+    /**
+     * swap elements
+     * @param array array
+     * @param left left pointer
+     * @param right right pointer
+     */
+    private static void swap(int[] array, int left, int right)
+    {
+        int temp;
+        temp = array[right];
+        array[right] = array[left];
+        array[left] = temp;
+    }
+}
