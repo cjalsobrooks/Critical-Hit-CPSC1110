@@ -177,7 +177,20 @@ public class FileCharacter {
     }
 
     
-    public void updateFilePath(UserAccount currentUser, String characterName) {
+   public void updateFilePath(UserAccount currentUser, String characterName) throws IOException {
+        String dummyFileString = (projectPath + "users\\" + currentUser.getUsername());
+        
+        File dummyFile = new File(dummyFileString);
+        if (!dummyFile.exists()) {
+            dummyFile.mkdirs();
+        }
+        
+        dummyFile = new File(dummyFileString +"\\"+ characterName+".txt");
+        
+        if (!dummyFile.exists()) {
+            dummyFile.createNewFile();
+        }
+        
         userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
         characterFilePath = (userAccountPath +"\\"+ characterName+".txt");
     }
