@@ -1,0 +1,17 @@
+import java.io.IOException;
+
+public class Tester
+{
+    public static void main(String[] args) throws IOException {
+
+        FileDirectories dir = new FileDirectories();
+        String filePath  = dir.getFilePath();
+
+        FileCharacter fileChara = new FileCharacter(filePath);
+        FileUserAccount fileUsers = new FileUserAccount(filePath);
+
+        PlayerCharacter character = new PlayerCharacter();
+        Login.login(character);
+    }
+
+}
