@@ -1,0 +1,42 @@
+public class Race {
+    private String name;
+    private int[] ageBoundaries = new int[2];
+    private int[][] heightBoundaries = new int[2][2];
+    private int[][] weightBoundaries = new int[2][2];
+    private int[] statModifiers = new int[6];
+
+    Race(String name, int[] ageBoundaries, int[][] heightBoundaries, int[][] weightBoundaries, int[] statMods)
+    {
+        this.name = name;
+        this.ageBoundaries = ageBoundaries;
+        this.heightBoundaries = heightBoundaries;
+        this.weightBoundaries = weightBoundaries;
+        this.statModifiers = statMods;
+    }
+
+    public int getAgeBoundary(int x)
+    {
+        return ageBoundaries[x];
+    }
+
+    public int getHeightBoundary(int x, int y)
+    {
+        return heightBoundaries[x][y];
+    }
+
+    public int getWeightBoundary(int x, int y)
+    {
+        return weightBoundaries[x][y];
+    }
+
+    public int getStatModifier(int x)
+    {
+        return statModifiers[x];
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+}
+
