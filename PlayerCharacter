@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ProjectFiles;
+
 
 /**
  *
@@ -21,64 +21,49 @@ public class PlayerCharacter {
     private String characterClass;
     private int[] generatedStats = new int[6];
     private int[] modifiedStats = new int[6];
-    
-    PlayerCharacter(String name, char gender, Race chosenRace, String alignment, String characterClass, int generationType)
+    private int characterStage;
+
+    PlayerCharacter(String name, char gender, Race chosenRace, String alignment, String charClass, int[] stats)
     {
         this.name = name;
         this.gender = gender;
         myRace = chosenRace;
         this.alignment = alignment;
-        this.characterClass = characterClass;
-        
-        int[] statArray = new int[6];
-        
-        switch(generationType)
-        {
-            case 1:
-            {
-               statArray = Generate.easyDice();
-            }
-            case 2:
-            {
-                statArray = Generate.mediumDice();
-            }
-            case 3:
-            {
-                statArray = Generate.hardDice();
-            }
-        }
-        
+        characterClass = charClass;
+        int[] statArray = stats;
+
+
         for (int i = 0; i<6; i++)
-            {
-                 modifiedStats[i] = statArray[i] + myRace.getStatModifier(i);                  
-            }
-        
+        {
+            modifiedStats[i] = statArray[i] + myRace.getStatModifier(i);
+        }
+
         setAge(chosenRace);
         setWeight(gender);
         setHeight(gender);
     }
-    
-    public void changeName(String name)
+
+    public void setName(String name)
     {
         this.name = name;
     }
-    
+
     public String getName()
     {
         return name;
     }
-    
-    public void changeGender(char gender)
+
+    public void setGender(char gender)
     {
         this.gender = gender;
     }
-    
+
     public char getGender()
     {
         return gender;
     }
-    
-    public void changeRace(Race race)
+
+    public void setRace(Race race)
     {
         myRace = race;
         for (int i = 0; i<6; i++)
@@ -86,18 +71,33 @@ public class PlayerCharacter {
             modifiedStats[i] = generatedStats[i] + myRace.getStatModifier(i);
         }
     }
-    
+
     public void setAge(Race chosenRace)
     {
         myRace = chosenRace;
         this.age = Generate.generateValue(chosenRace.getAgeBoundary(0), chosenRace.getAgeBoundary(1));
     }
-    
+
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+
+    public void setCharacterClass(String newClass)
+    {
+        characterClass = newClass;
+    }
+
+    public void setCharacterStage(int stage)
+    {
+        characterStage = stage;
+    }
+
     public int getAge()
     {
         return age;
     }
-    
+
     public void setHeight(char gender)
     {
         if (gender == 'M')
@@ -109,12 +109,18 @@ public class PlayerCharacter {
             this.height = Generate.generateValue(myRace.getHeightBoundary(1,0), myRace.getHeightBoundary(1,1));
         }
     }
-    
+
+    public void setHeight(int height)
+    {
+        this.height = height;
+    }
+
+
     public int getHeight()
     {
         return height;
     }
-    
+
     public void setWeight(char gender)
     {
         if (gender == 'M')
@@ -126,42 +132,43 @@ public class PlayerCharacter {
             this.weight = Generate.generateValue(myRace.getWeightBoundary(1,0), myRace.getWeightBoundary(1,1));
         }
     }
-    
+
+    public void setWeight(int weight)
+    {
+        this.weight = weight;
+    }
+
     public int getWeight()
     {
         return weight;
     }
-    
-    public void changeAlignment(String alignment)
+
+    public void setAlignment(String alignment)
     {
         this.alignment = alignment;
     }
-    
+
     public String getAlignment()
     {
         return alignment;
     }
-    
-    public void changeCharacterClass(String characterClass)
-    {
-        this.characterClass = characterClass;
-    }
-    
-    public String getCharacterClass()
-    {
-        return characterClass;
-    }
-    
+
+
     public int[] getModifiedStats()
     {
         return modifiedStats;
     }
-    
+
     public int[] getGeneratedStats()
     {
         return generatedStats;
     }
-    
+
+    public String getCharacterClass()
+    {
+        return characterClass;
+    }
+
     public void displayGeneratedStats()
     {
         for (int i = 0; i<6; i++)
@@ -170,7 +177,7 @@ public class PlayerCharacter {
         }
         System.out.println();
     }
-    
+
     public void displayModifiedStats()
     {
         for (int i = 0; i<6; i++)
@@ -178,5 +185,15 @@ public class PlayerCharacter {
             System.out.print(modifiedStats[i]+ " ");
         }
         System.out.println();
+    }
+
+    public Race getRace()
+    {
+        return myRace;
+    }
+
+    public int getCharacterStage()
+    {
+        return characterStage;
     }
 }
