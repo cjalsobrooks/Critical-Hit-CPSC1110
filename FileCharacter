@@ -28,7 +28,8 @@ public class FileCharacter {
     } 
 
     
-    public void loadFromFile(PlayerCharacter character) throws FileNotFoundException {
+    public void loadFromFile(UserAccount currentUser, String characterName, PlayerCharacter character) throws FileNotFoundException {
+        updateFilePath(currentUser, characterName);
         
         File inputFile = new File(characterFilePath);
         Scanner input = new Scanner(inputFile);
@@ -110,7 +111,9 @@ public class FileCharacter {
         
     }
     
-    public void updateFromMemory(PlayerCharacter character) throws FileNotFoundException {
+    public void updateFromMemory(UserAccount currentUser, PlayerCharacter character) throws FileNotFoundException {
+        updateFilePath(currentUser, character.getName());
+        
         characterList.clear();
         characterList.add("Name="+character.getName());
         characterList.add("Gender="+character.getGender());
@@ -168,37 +171,15 @@ public class FileCharacter {
         PrintWriter outfile = new PrintWriter(characterFilePath);
         
          for (int i = 0;i < characterList.size();i++) {
-                outfile.println((String) characterList.get(i));
+                outfile.write((String) characterList.get(i));
             }
             outfile.close();
     }
+
     
-    public void getFilePath(UserAccount currentUser, PlayerCharacter character) {
-        String dummyPath = (projectPath+"users\\"+currentUser.getUsername()+"\\"+(character.getName())+".txt");
-        File dummyFile = new File(dummyPath);
-        
-        if (dummyFile.exists()) {
-            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
-            characterFilePath = (userAccountPath +"\\"+ (character.getName())+".txt");
-        } else {
-            dummyFile.mkdirs();
-            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
-            characterFilePath = (userAccountPath +"\\"+ (character.getName())+".txt");
-        }
-    }
-    
-    public void getFilePath(UserAccount currentUser, String characterName) {
-        String dummyPath = (projectPath+"users\\"+currentUser.getUsername()+"\\"+characterName+".txt");
-        File dummyFile = new File(dummyPath);
-        
-        if (dummyFile.exists()) {
-            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
-            characterFilePath = (userAccountPath +"\\"+ characterName+".txt");
-        } else {
-            dummyFile.mkdirs();
-            userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
-            characterFilePath = (userAccountPath +"\\"+ characterName+".txt");
-        }
+    public void updateFilePath(UserAccount currentUser, String characterName) {
+        userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
+        characterFilePath = (userAccountPath +"\\"+ characterName+".txt");
     }
     
 }
