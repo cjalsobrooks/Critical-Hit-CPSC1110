@@ -1,0 +1,115 @@
+import javax.swing.*;
+import java.io.IOException;
+
+public class Display
+{
+    /**
+     * menu to display character info
+     * @param character character object
+     * @param account account logged in
+     */
+    public static void displayCharacter(PlayerCharacter character, UserAccount account)
+    {
+        /*
+        frame
+         */
+        JFrame frame = new JFrame();
+        frame.setSize(500,500);
+        frame.setDefaultCloseOperation(3);
+        frame.setVisible(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        frame.add(panel);
+
+        /*
+        labels and info - this is lots
+         */
+        JLabel name = new JLabel("Name: " + character.getName());
+        name.setBounds(40, 10, 100, 25);
+        panel.add(name);
+
+        JLabel gender = new JLabel("Gender: " + character.getGender());
+        gender.setBounds(20, 50, 150, 25);
+        panel.add(gender);
+
+        JLabel race = new JLabel("Race:" + character.getRace().getName());
+        race.setBounds(170, 10, 150, 25);
+        panel.add(race);
+
+        JLabel charClass = new JLabel("Class: " + character.getCharacterClass());
+        charClass.setBounds(290, 10, 150, 25);
+        panel.add(charClass);
+
+        JLabel alignment = new JLabel("Alignment: " + character.getAlignment());
+        alignment.setBounds(130, 90, 200, 25 );
+        panel.add(alignment);
+
+        JLabel age = new JLabel("Age: " + character.getAge());
+        age.setBounds(130, 50, 100, 25);
+        panel.add(age);
+
+        JLabel weight = new JLabel("Weight: " + character.getWeight() + " lbs");
+        weight.setBounds(240, 50, 100, 25);
+        panel.add(weight);
+
+        JLabel height = new JLabel("Height: " + character.getHeight() + " inches");
+        height.setBounds(350, 50, 100, 25);
+        panel.add(height);
+
+        JLabel con = new JLabel("Constitution: " + character.getGeneratedStats()[0]);
+        con.setBounds(40, 150, 150, 25);
+        panel.add(con);
+
+        JLabel str = new JLabel("Strength: " + character.getGeneratedStats()[1]);
+        str.setBounds(40, 190, 150, 25);
+        panel.add(str);
+
+        JLabel dex = new JLabel("Dexterity: " + character.getGeneratedStats()[2]);
+        dex.setBounds(40,230, 150, 25);
+        panel.add(dex);
+
+        JLabel intel = new JLabel("Intelligence: " + character.getGeneratedStats()[3]);
+        intel.setBounds(200, 150, 150, 25);
+        panel.add(intel);
+
+        JLabel wis = new JLabel("Wisdom: " + character.getGeneratedStats()[4]);
+        wis.setBounds(200, 190, 150, 25);
+        panel.add(wis);
+
+        JLabel cha = new JLabel("Charisma: " + character.getGeneratedStats()[5]);
+        cha.setBounds(200, 230, 150, 25);
+        panel.add(cha);
+
+        /*
+        button to return to character select screen
+         */
+        JButton back = new JButton("Return to character select");
+        back.setBounds(60, 270, 200, 25);
+        panel.add(back);
+        back.addActionListener(e ->
+        {
+            try {
+                CharacterSelection.characterSelect(character, account); // character select menu
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        /*
+        button to return to login screen
+         */
+        JButton logout = new JButton("Logout");
+        logout.setBounds(60, 300, 200, 25);
+        panel.add(logout);
+        logout.addActionListener(e ->
+        {
+            try {
+                Login.login(character); // login screen
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+    }
+}
