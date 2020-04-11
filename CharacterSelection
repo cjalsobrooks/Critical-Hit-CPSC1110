@@ -1,0 +1,120 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import javax.swing.*;
+import java.util.ArrayList;
+
+public class CharacterSelection implements ActionListener
+{
+
+    /**
+     * menu to choose character to load or create new character
+     * @param character character object
+     * @param account currently logged in account
+     * @throws IOException
+     */
+    public static void characterSelect(PlayerCharacter character, UserAccount account) throws IOException
+    {
+
+            /*
+            file path stuff
+             */
+            FileDirectories dir = new FileDirectories();
+            String filePath  = dir.getFilePath();
+            FileCharacter fileChara = new FileCharacter(filePath);
+            FileUserAccount fileUsers = new FileUserAccount(filePath);
+
+            /*
+            set up frame
+             */
+            JFrame frame = new JFrame();
+            frame.setSize(500, 500);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(null);
+            frame.add(panel);
+
+            /*
+            create character button
+             */
+            JButton newChar = new JButton("Create New");
+            newChar.setBounds(150, 200, 150, 40);
+            panel.add(newChar);
+            newChar.addActionListener(e ->
+            {
+                try {
+                    CreateCharacter.createNewCharacter(character, account); // open character creation screen
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            ArrayList characters = fileUsers.getCharacterList(account); // access character names
+
+            /*
+            choose a character text
+             */
+            JLabel chooseOne = new JLabel("Choose a character:");
+            chooseOne.setBounds(150, 10, 200, 40);
+            panel.add(chooseOne);
+
+
+            /*
+            load character 1 button
+             */
+            JButton charOne = new JButton(characters.get(0).toString()); // label button w character name
+            charOne.setBounds(75, 50, 300, 40);
+            panel.add(charOne);
+            charOne.addActionListener(e ->
+            {
+                try {
+                    fileChara.loadFromFile(account, (String) characters.get(0),character); // load character
+                    Display.displayCharacter(character, account); // should display character
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+
+            /*
+            load character 2 button
+             */
+            JButton charTwo = new JButton((String) characters.get(1)); // label button w character name
+            charTwo.setBounds(75, 100, 300, 40);
+            panel.add(charTwo);
+            charTwo.addActionListener(e -> {
+                try {
+                    fileChara.loadFromFile(account, (String) characters.get(1),character); // load character
+                    Display.displayCharacter(character, account); // should display character
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            /*
+            load character 3 button
+             */
+            JButton charThree = new JButton((String) characters.get(2)); // label button w character name
+            charThree.setBounds(75, 150, 300, 40);
+            panel.add(charThree);
+            charThree.addActionListener(e -> {
+                try {
+                    fileChara.loadFromFile(account, (String) characters.get(2),character); // load character
+                    Display.displayCharacter(character, account); // should display character
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+        }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+
+    }
+}
+
