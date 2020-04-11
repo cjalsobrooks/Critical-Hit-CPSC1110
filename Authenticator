@@ -1,0 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ProjectFiles;
+
+/**
+ *
+ * @author Conner Fulford
+ */
+public class Authenticator {
+    
+    public static int authenticate(UserAccount account, FileUserAccount fileUsers) {
+        int comparison = -1;
+        for (int i = 0; i < fileUsers.getListLength(); i++) {
+            if (account.compareUsername(fileUsers.getAccount(i))) {
+                comparison = 0;
+                if (account.comparePassword(fileUsers.getAccount(i))) {
+                    comparison = 1;
+                    return comparison;   
+                }
+            } 
+        }
+        return comparison;
+    }
+}
