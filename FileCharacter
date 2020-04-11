@@ -7,6 +7,7 @@ package ProjectFiles;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -28,7 +29,7 @@ public class FileCharacter {
     } 
 
     
-    public void loadFromFile(UserAccount currentUser, String characterName, PlayerCharacter character) throws FileNotFoundException {
+    public void loadFromFile(UserAccount currentUser, String characterName, PlayerCharacter character) throws FileNotFoundException, IOException {
         updateFilePath(currentUser, characterName);
         
         File inputFile = new File(characterFilePath);
@@ -42,18 +43,19 @@ public class FileCharacter {
             i++;
         }
         
+                
         String[] parsedStringArray = new String[15];
-        
-        int j = 0;
-        while (input.hasNextLine()) { 
-            parsedStringArray[i] = Parser.parseEquals((String) characterList.get(j));
-            j++;
+
+        for (int j = 0; j < parsedStringArray.length; j++) { 
+            String dummyString = (Parser.parseEquals((String) characterList.get(j)));
+            parsedStringArray[j] = dummyString;
         }
         
-        String name = parsedStringArray[1];
-        char gender = (parsedStringArray[2].charAt(0));
+
+        String name = parsedStringArray[0];
+        char gender = (parsedStringArray[1].charAt(0));
         
-                ArrayList raceInfo = Parser.parseString(parsedStringArray[3]);
+                ArrayList raceInfo = Parser.parseString(parsedStringArray[2]);
                 String raceName = (String) raceInfo.get(0);
                 
                 int raceAge[] = new int[2];
@@ -82,20 +84,20 @@ public class FileCharacter {
         
             Race characterRace = new Race(raceName, raceAge, raceHeight, raceWeight, raceStats);
                 
-        int age = Integer.parseInt(parsedStringArray[4]);
-        int height = Integer.parseInt(parsedStringArray[5]);        
-        int weight = Integer.parseInt(parsedStringArray[6]);
-        String alignment = parsedStringArray[7];
-        String characterClass = parsedStringArray[8];
-        
+        int age = Integer.parseInt(parsedStringArray[3]);
+        int height = Integer.parseInt(parsedStringArray[4]);        
+        int weight = Integer.parseInt(parsedStringArray[5]);
+        String alignment = parsedStringArray[6];
+        String characterClass = parsedStringArray[7];
+
         int[] generatedStats = new int[6];
-            generatedStats[0] = Integer.parseInt(parsedStringArray[9]);
-            generatedStats[1] = Integer.parseInt(parsedStringArray[10]);
-            generatedStats[2] = Integer.parseInt(parsedStringArray[11]);
-            generatedStats[3] = Integer.parseInt(parsedStringArray[12]);
-            generatedStats[4] = Integer.parseInt(parsedStringArray[13]);
-            generatedStats[5] = Integer.parseInt(parsedStringArray[14]);
-        int characterStage = Integer.parseInt(parsedStringArray[15]);       
+            generatedStats[0] = Integer.parseInt(parsedStringArray[8]);
+            generatedStats[1] = Integer.parseInt(parsedStringArray[9]);
+            generatedStats[2] = Integer.parseInt(parsedStringArray[10]);
+            generatedStats[3] = Integer.parseInt(parsedStringArray[11]);
+            generatedStats[4] = Integer.parseInt(parsedStringArray[12]);
+            generatedStats[5] = Integer.parseInt(parsedStringArray[13]);
+        int characterStage = Integer.parseInt(parsedStringArray[14]);       
                 
         
         character.setName(name);
@@ -111,7 +113,7 @@ public class FileCharacter {
         
     }
     
-    public void updateFromMemory(UserAccount currentUser, PlayerCharacter character) throws FileNotFoundException {
+    public void updateFromMemory(UserAccount currentUser, PlayerCharacter character) throws FileNotFoundException, IOException {
         updateFilePath(currentUser, character.getName());
         
         characterList.clear();
@@ -171,14 +173,14 @@ public class FileCharacter {
         PrintWriter outfile = new PrintWriter(characterFilePath);
         
          for (int i = 0;i < characterList.size();i++) {
-                outfile.write((String) characterList.get(i));
+                outfile.println((String) characterList.get(i));
             }
             outfile.close();
     }
 
     
-   public void updateFilePath(UserAccount currentUser, String characterName) throws IOException {
-        String dummyFileString = (projectPath + "users\\" + currentUser.getUsername());
+    public void updateFilePath(UserAccount currentUser, String characterName) throws IOException {
+        String dummyFileString = (projectPath + "\\users\\" + currentUser.getUsername());
         
         File dummyFile = new File(dummyFileString);
         if (!dummyFile.exists()) {
@@ -191,7 +193,7 @@ public class FileCharacter {
             dummyFile.createNewFile();
         }
         
-        userAccountPath = (projectPath + "users\\" + currentUser.getUsername());
+        userAccountPath = (projectPath + "\\users\\" + currentUser.getUsername());
         characterFilePath = (userAccountPath +"\\"+ characterName+".txt");
     }
     
