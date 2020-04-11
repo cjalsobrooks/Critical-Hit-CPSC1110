@@ -1,7 +1,9 @@
-package ProjectFiles;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.swing.*;
 
 /**
@@ -25,8 +27,21 @@ public class Login implements ActionListener
     private static JTextField passTextTwo;
     private static JPanel newAccountPanel;
 
-        
-        public static void login() {
+
+    public static void login(PlayerCharacter character) throws IOException {
+
+        /*
+        filepath stuff
+         */
+        FileDirectories dir = new FileDirectories();
+        String filePath  = dir.getFilePath();
+
+        FileCharacter fileChara = new FileCharacter(filePath);
+        FileUserAccount fileUsers = new FileUserAccount(filePath);
+
+        /*
+        frame
+         */
         JPanel panel = new JPanel();
 
         JFrame frame = new JFrame();
@@ -37,6 +52,9 @@ public class Login implements ActionListener
 
         panel.setLayout(null);
 
+        /*
+        labels and text fields
+         */
         userLabel = new JLabel("User");
         userLabel.setBounds(10, 20, 80, 25);
         panel.add(userLabel);
@@ -55,12 +73,39 @@ public class Login implements ActionListener
 
         button = new JButton("Login");
         button.setBounds(10, 80, 80, 25);
-        button.addActionListener(new Login());
+        /*
+        AUTHENTICATE LOGIN
+         */
+        button.addActionListener(e ->
+        {
+            String user = userText.getText();
+            String password = passText.getText();
+            UserAccount account = new UserAccount(user, password, "");
+            if (Authenticator.authenticate(account,fileUsers) == 1) // check if account is registered
+            {
+                success.setText("Login successful");
+                try {
+                    CharacterSelection.characterSelect(character, account); // move to character select screen
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            } else {
+                success.setText("Incorrect username or password"); // error message
+            }
+        });
         panel.add(button);
 
         newAccountButton = new JButton("Create Account");
         newAccountButton.setBounds(100, 80, 150, 25);
-        newAccountButton.addActionListener(new Login() );
+        newAccountButton.addActionListener(e ->
+        {
+            try {
+                Login.createAccount(character); // create account button
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         panel.add(newAccountButton);
 
 
@@ -68,15 +113,41 @@ public class Login implements ActionListener
         success.setBounds(10, 110, 300, 25);
         panel.add(success);
 
+
+       /*
+       close app
+        */
+        JButton close = new JButton("Close application");
+        close.setBounds(100, 120, 150, 25);
+        panel.add(close);
+        close.addActionListener(e->
+        {
+            frame.dispose(); // close app
+        });
+
     }
 
 
     /**
      * create a new user account
+     * @param character character object
+     *
      */
-    public static void createAccount()
-    {
+    public static void createAccount(PlayerCharacter character) throws IOException {
 
+        /*
+        filepath stuff
+         */
+        FileDirectories dir = new FileDirectories();
+        String filePath  = dir.getFilePath();
+
+        FileCharacter fileChara = new FileCharacter(filePath);
+        FileUserAccount fileUsers = new FileUserAccount(filePath);
+
+
+        /*
+        frame
+         */
         newAccountPanel = new JPanel();
 
         JFrame frame = new JFrame();
@@ -87,6 +158,9 @@ public class Login implements ActionListener
 
         newAccountPanel.setLayout(null);
 
+        /*
+        labels and text fields
+         */
         JLabel username = new JLabel("Username: ");
         username.setBounds(10, 20, 120, 25);
         newAccountPanel.add(username);
@@ -121,7 +195,29 @@ public class Login implements ActionListener
 
         submit = new JButton("Submit");
         submit.setBounds(50, 140, 150, 25);
-        submit.addActionListener(new Login());
+        submit.addActionListener(e ->
+        {
+            if (passTextOne.getText().equals(passTextTwo.getText())) // check that passwords are equal
+            {
+                UserAccount account = new UserAccount(userText.getText(), passTextOne.getText(), emailField.getText());
+                try {
+                    fileUsers.addAccount(account); // add account to account file
+
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+                success.setText("Successful account creation.");
+                try {
+                    Login.login(character); // return to login screen
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else
+            {
+                success.setText("Passwords do not match."); // error message
+            }
+        });
         newAccountPanel.add(submit);
 
         success = new JLabel("");
@@ -138,32 +234,6 @@ public class Login implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getSource() == button)
-        {
-            String user = userText.getText();
-            String password = passText.getText();
-            if (user.equals("Clara") && password.equals("password")) {
-                success.setText("Login successful");
-                
-            } else {
-                success.setText("Incorrect username or password");
-            }
-        }
-        else if (e.getSource() == newAccountButton)
-        {
-            Login.createAccount();
-        }
-        else if (e.getSource() == submit)
-        {
-            if (passTextOne.getText().equals(passTextTwo.getText()))
-            {
-                success.setText("Successful account creation.");
-                Login.login();
-            }
-            else
-            {
-                success.setText("Passwords do not match.");
-            }
-        }
+
     }
 }
