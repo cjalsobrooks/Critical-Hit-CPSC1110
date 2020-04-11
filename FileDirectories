@@ -27,10 +27,15 @@ public class FileDirectories {
         } 
         
         File testDirectory = new File(strFilePath + "\\users");
-        if (testDirectory.exists()) {
+        if (!testDirectory.exists()) {
             testDirectory.mkdir();
         }
-    }
+   
+        testDirectory = new File(strFilePath + "\\userAccounts.txt");
+        if (!testDirectory.exists()) {
+            testDirectory.createNewFile();
+        }
+}
     
     public String getFilePath() {
         return strFilePath;
