@@ -13,12 +13,17 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class StatAssignment implements ActionListener
 {
+    /*
+    set up stat block selection
+     */
     private static int[] statValues;
     private static int[] finalStats = new int[6];
-    private static boolean clicked = false;
     private static JComboBox<Integer> statList1;
     private static JComboBox<Integer> statList2;
     private static JComboBox<Integer> statList3;
@@ -26,17 +31,46 @@ public class StatAssignment implements ActionListener
     private static JComboBox<Integer> statList5;
     private static JComboBox<Integer> statList6;
     private static JLabel statConfirmation;
-    
-    public static int[] assignStats(int[] stats)
-    { 
-        while (!clicked)
-        {
-            statValues = new int[6];
+    private static int charStage;
+
+    /**
+     * assign stat values to attributes jframe
+     * @param stats array of generated stat values
+     * @param account user account logged in
+     * @param character character to assign to
+     * @param race race of character
+     * @return final stat block
+     * @throws IOException
+     */
+    public static int[] assignStats(int[] stats, UserAccount account, PlayerCharacter character, Race race) throws IOException {
+
+        /*
+        filepath stuff
+         */
+        FileDirectories dir = new FileDirectories();
+        String filePath  = dir.getFilePath();
+
+        FileCharacter fileChara = new FileCharacter(filePath);
+        FileUserAccount fileUsers = new FileUserAccount(filePath);
+
+        /*
+        finish assigning character variables
+         */
+            character.setRace(race);
+            character.setHeight(character.getGender());
+            character.setWeight(character.getGender());
+            statValues = character.getModifiedStats();
+            /*
+            transfer stat values to new array
+             */
             for (int i = 0; i < 6; i++)
             {
                 statValues[i] = stats[i];
             }
 
+            /*
+            new jframe
+             */
             JFrame frame = new JFrame();
             frame.setBounds(100, 100, 500, 500);
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -46,10 +80,16 @@ public class StatAssignment implements ActionListener
             panel.setLayout(null);
             frame.add(panel);
 
+            /*
+            prompt
+             */
             JLabel prompt = new JLabel("Choose where to assign your stats: ");
             prompt.setBounds(50, 15, 400, 25);
             panel.add(prompt);
 
+            /*
+            these next 6 are all just labels
+             */
             JLabel con = new JLabel("Constitution: ");
             con.setBounds(50, 50, 125, 20);
             panel.add(con);
@@ -82,6 +122,9 @@ public class StatAssignment implements ActionListener
             statList1.setBounds(175,50,40, 20);
             panel.add(statList1);
 
+            /*
+            add items to combobox
+             */
             for (int i = 0; i < 6; i++)
             {
                 statList1.addItem(stats[i]);
@@ -95,6 +138,9 @@ public class StatAssignment implements ActionListener
             statList2.setBounds(175,75,40, 20);
             panel.add(statList2);
 
+            /*
+            add items to combobox
+             */
             for (int i = 0; i < 6; i++)
             {
                 statList2.addItem(stats[i]);
@@ -109,6 +155,9 @@ public class StatAssignment implements ActionListener
             statList3.setBounds(175,100,40, 20);
             panel.add(statList3);
 
+            /*
+            add items to combobox
+             */
             for (int i = 0; i < 6; i++)
             {
                 statList3.addItem(stats[i]);
@@ -123,6 +172,9 @@ public class StatAssignment implements ActionListener
             statList4.setBounds(175,125,40, 20);
             panel.add(statList4);
 
+            /*
+            add items to combobox
+             */
             for (int i = 0; i < 6; i++)
             {
                 statList4.addItem(stats[i]);
@@ -137,6 +189,9 @@ public class StatAssignment implements ActionListener
             statList5.setBounds(175,150,40, 20);
             panel.add(statList5);
 
+            /*
+            add items to combobox
+             */
             for (int i = 0; i < 6; i++)
             {
                 statList5.addItem(stats[i]);
@@ -151,75 +206,124 @@ public class StatAssignment implements ActionListener
             statList6.setBounds(175,175,40, 20);
             panel.add(statList6);
 
+            /*
+            add items to combobox
+             */
             for (int i = 0; i < 6; i++)
             {
                 statList6.addItem(stats[i]);
             }
 
 
+            /*
+            confirm assignments
+             */
             JButton confirm = new JButton("Confirm");
             confirm.setBounds(90, 200, 100, 20);
-            confirm.addActionListener(new StatAssignment());
+            confirm.addActionListener(e ->
+            {
+                int constitution = (Integer)statList1.getSelectedItem();
+
+                int strength = (Integer)statList2.getSelectedItem();
+
+                int dexterity = (Integer)statList3.getSelectedItem();
+
+                int intelligence = (Integer)statList4.getSelectedItem();
+
+                int wisdom = (Integer)statList5.getSelectedItem();
+
+                int charisma = (Integer)statList6.getSelectedItem();
+
+                int[] statChoices = {constitution, strength, dexterity, intelligence, wisdom, charisma};
+
+                if (ArrayTools.contains(statChoices, 0)) // make sure all stats have a value
+                {
+                    statConfirmation.setText("Please choose a value for every stat.");
+                }
+                else
+                {
+                    /*
+                    set up for input validation
+                     */
+                    int[] tempArrayChoices = new int[6];
+                    int[] tempArrayGen = new int[6];
+
+                    for (int i = 0; i < statChoices.length; i++)
+                    {
+                        tempArrayChoices[i] = statChoices[i];
+                    }
+
+                    for (int i = 0; i < statValues.length; i++)
+                    {
+                        tempArrayGen[i] = statValues[i];
+                    }
+
+                    /*
+                    sort both arrays using quicksort
+                     */
+                    SortTools.quickSort(tempArrayChoices);
+                    SortTools.quickSort(tempArrayGen);
+
+
+                    /*
+                    make sure that arrays are equal so that no stats are assigned twice
+                     */
+                    if (!(Arrays.equals(tempArrayChoices, tempArrayGen)))
+                    {
+                        statConfirmation.setText("Please assign a different value to each stat.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < statChoices.length; i++)
+                        {
+                            finalStats[i] = statValues[i];
+                            statConfirmation.setText("Stats confirmed.");
+                        }
+
+                        /*
+                        set stats
+                         */
+                        character.setGeneratedStats(finalStats);
+                        try {
+                            fileChara.updateFromMemory(account, character);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        Display.displayCharacter(character, account); // display character
+
+                    }
+                }
+            });
             panel.add(confirm);
 
             statConfirmation = new JLabel("");
             statConfirmation.setBounds(40, 225, 300, 20);
             panel.add(statConfirmation);
 
+            /*
+            button to return to login screen
+             */
+        JButton saveAndQuit = new JButton("Save and Quit");
+        saveAndQuit.setBounds(40, 250, 150, 25);
+        panel.add(saveAndQuit);
+        saveAndQuit.addActionListener(e ->
+        {
+            charStage = 2;
+            try {
+                Login.login(character);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
-        }
-        
+
         return finalStats;
     }
 
-  
- 
-    
-                
-    
-    
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        int constitution = statList1.getSelectedIndex();
 
-        int strength = statList2.getSelectedIndex();
-
-        int dexterity = statList3.getSelectedIndex();
-
-        int intelligence = statList4.getSelectedIndex();
-
-        int wisdom = statList5.getSelectedIndex();
-
-        int charisma = statList6.getSelectedIndex();
-
-        int[] statChoices = {constitution, strength, dexterity, intelligence, wisdom, charisma};
-
-        if (ArrayTools.contains(statChoices, 0))
-        {
-            statConfirmation.setText("Please choose a value for every stat.");
-        }
-        else
-        {
-            if (ArrayTools.checkDuplicates(statChoices))
-            {
-                statConfirmation.setText("Please assign a different value to each stat.");
-            }
-            else
-            {
-                
-                for (int i = 0; i < statChoices.length; i++)
-                {
-                    finalStats[i] = statValues[statChoices[i]-1];
-                }
-
-                statConfirmation.setText("Stats confirmed.");
-                clicked = true;
-
-            }
-           }       
-        
     }
 }
-
 
