@@ -1,1 +1,41 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+/**
+ *
+ * @author cjals
+ */
+public class ArrayTools {
+    public static boolean contains(int[] array, int num) {
+        for (int element : array) {
+            if (element == num) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkDuplicates(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            int item = array[i];
+
+            for (int j = 0; j < array.length; j++) {
+                if (i == j) {
+                    continue;
+                } else {
+                    int check = array[j];
+                    if (item == check) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+}
 
