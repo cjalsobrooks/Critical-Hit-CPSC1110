@@ -3,7 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package ProjectFiles.GUIClasses;
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import ProjectFiles.FileEditorClasses.FileCharacter;
+import ProjectFiles.FileEditorClasses.FileDirectories;
+import ProjectFiles.FileEditorClasses.FileUserAccount;
+import ProjectFiles.StaticClasses.Generate;
+import ProjectFiles.FondationClasses.PlayerCharacter;
+import ProjectFiles.FondationClasses.Race;
+import ProjectFiles.FondationClasses.UserAccount;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -16,23 +30,26 @@ import javax.swing.*;
  */
 public class CreateCharacter implements ActionListener
 {
-    private final static Race HUMAN = new Race("Human", new int[] {15, 30}, new int[][] {{54, 89}, {52, 79}}, new int[][] {{90, 260}, {75, 200}}, new int[] {0,0,0,0,0,0});
-    private final static Race ELF = new Race("Elf", new int[] {80, 180}, new int[][] {{48, 66}, {44, 64}}, new int[][] {{70, 130}, {65, 100}}, new int[] {0,2,-2,2,0,0});
-    private final static Race DWARF = new Race("Dwarf", new int[] {40, 70}, new int[][] {{48, 58}, {44, 55}}, new int[][] {{150, 230}, {125, 180}}, new int[] {2,0,2,0,0,-2});
-    private final static Race GNOME = new Race("Gnome", new int[] {30, 60}, new int[][] {{30, 41}, {28, 39}}, new int[][] {{40, 60}, {35, 55}}, new int[] {-2,2,2,0,0,0});
-    private final static Race HALFLING = new Race("Halfling", new int[] {30, 50}, new int[][] {{38, 51}, {35, 49}}, new int[][] {{40, 60}, {35, 55}}, new int[] {-2,2,0,0,2,0});
+    /*
+    race options
+    */
+    private final static Race HUMAN     = new Race("Human",    new int[] { 15,  30}, new int[][] {{54, 89}, {52, 79}}, new int[][] {{ 90, 260}, { 75, 200}}, new int[] { 0, 0, 0, 0, 0, 0});
+    private final static Race ELF       = new Race("Elf",      new int[] { 80, 180}, new int[][] {{48, 66}, {44, 64}}, new int[][] {{ 70, 130}, { 65, 100}}, new int[] { 0, 2,-2, 2, 0, 0});
+    private final static Race DWARF     = new Race("Dwarf",    new int[] { 40,  70}, new int[][] {{48, 58}, {44, 55}}, new int[][] {{150, 230}, {125, 180}}, new int[] { 2, 0, 2, 0, 0,-2});
+    private final static Race GNOME     = new Race("Gnome",    new int[] { 30,  60}, new int[][] {{30, 41}, {28, 39}}, new int[][] {{ 40,  60}, { 35, 55 }}, new int[] {-2, 2, 2, 0, 0, 0});
+    private final static Race HALFLING  = new Race("Halfling", new int[] { 30,  50}, new int[][] {{38, 51}, {35, 49}}, new int[][] {{ 55,  80}, { 45, 70 }}, new int[] {-2, 2, 0, 0, 2, 0});
 
-    private final static Race[] RACES = {HUMAN, ELF, DWARF, GNOME, HALFLING};
-    private final static String[] RACE_NAMES = {"Human", "Elf", "Dwarf", "Gnome", "Halfling"};
-    private final static String[] ALIGNMENTS = {"Lawful Good", "Neutral Good", "Chaotic Good", "Lawful Neutral", "True Neutral",
-            "Chaotic Neutral", "Lawful Evil", "Neutral Evil", "Chaotic Evil"};
+    private final static Race[] RACES = {HUMAN, ELF, DWARF, GNOME, HALFLING}; // race array
+    private final static String[] RACE_NAMES = {"Human", "Elf", "Dwarf", "Gnome", "Halfling"}; // race names
+    private final static String[] ALIGNMENTS = {"Lawful Good", "Neutral Good", "Chaotic Good", "Lawful Neutral", "True Neutral", // alignments
+                                                "Chaotic Neutral", "Lawful Evil", "Neutral Evil", "Chaotic Evil"};
 
-    private static String charName = "";
-    private static int generationType = 0;
-    private static char chosenGender = 'a';
-    private static String chosenClass = "";
-    private static String chosenAlignment;
-    private static Race selectedRace;
+    private static String charName = ""; // character name
+    private static int generationType = 0; // easy, med, hard stat generation
+    private static char chosenGender = 'a'; // gender
+    private static String chosenClass = ""; // class
+    private static String chosenAlignment; // alignment
+    private static Race selectedRace; //race
     private static int[] stats;
     private static int charStage;
 
@@ -40,21 +57,33 @@ public class CreateCharacter implements ActionListener
 
     public static void createNewCharacter(PlayerCharacter character, UserAccount account) throws IOException
     {
+        /*
+        set up files
+        */
         FileDirectories dir = new FileDirectories();
         String filePath  = dir.getFilePath();
 
         FileCharacter fileChara = new FileCharacter(filePath);
         FileUserAccount fileUsers = new FileUserAccount(filePath);
 
+        /*
+        create frame
+        */
         JFrame frame = new JFrame();
         frame.setSize(500,500);
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
 
+        /*
+        create panel
+        */
         JPanel panel = new JPanel();
         panel.setLayout(null);
         frame.add(panel);
-
+        
+        /*
+        labels and buttons
+        */
         JLabel name = new JLabel("Character Name: ");
         name.setBounds(20, 10, 150, 25);
         panel.add(name);
@@ -70,6 +99,9 @@ public class CreateCharacter implements ActionListener
         JButton male = new JButton("Male");
         male.setBounds(185, 50, 100, 25);
         panel.add(male);
+        /*
+        when clicked set gender to male
+        */
         male.addActionListener(e ->
         {
             chosenGender = 'M';
@@ -78,16 +110,24 @@ public class CreateCharacter implements ActionListener
         JButton female = new JButton("Female");
         female.setBounds(295, 50, 100, 25);
         panel.add(female);
-
-        JLabel race = new JLabel("Character Race: ");
-        race.setBounds(20, 90, 150, 25);
-        panel.add(race);
+        /*
+        when clicked set gender to female
+        */
         female.addActionListener(e ->
         {
             chosenGender = 'F';
         });
 
+        JLabel race = new JLabel("Character Race: ");
+        race.setBounds(20, 90, 150, 25);
+        panel.add(race);
+        
+        
+
         JComboBox selectRace = new JComboBox();
+        /*
+        set up race options
+        */
         for (int i = 0; i < 5; i++)
         {
             selectRace.addItem(RACE_NAMES[i]);
@@ -108,6 +148,9 @@ public class CreateCharacter implements ActionListener
         panel.add(alignment);
 
         JComboBox selectAlignment = new JComboBox();
+        /*
+        set up alignment options
+        */
         for (int i = 0; i < 9; i++)
         {
             selectAlignment.addItem(ALIGNMENTS[i]);
@@ -122,6 +165,9 @@ public class CreateCharacter implements ActionListener
         JButton statEasy = new JButton("Easy");
         statEasy.setBounds(20, 250, 95, 25);
         panel.add(statEasy);
+        /*
+        when clicked assign stat gen method
+        */                
         statEasy.addActionListener(e ->
         {
             generationType = 1;
@@ -130,6 +176,9 @@ public class CreateCharacter implements ActionListener
         JButton statMed = new JButton("Medium");
         statMed.setBounds(120, 250, 95, 25);
         panel.add(statMed);
+        /*
+        when clicked assign stat gen method
+        */
         statMed.addActionListener(e ->
         {
             generationType = 2;
@@ -138,6 +187,9 @@ public class CreateCharacter implements ActionListener
         JButton statHard = new JButton("Hard");
         statHard.setBounds(220, 250, 95, 25);
         panel.add(statHard);
+        /*
+        when clicked assign stat gen method
+        */
         statHard.addActionListener(e ->
         {
             generationType = 3;
@@ -145,16 +197,20 @@ public class CreateCharacter implements ActionListener
 
         errorMessage = new JLabel("");
         errorMessage.setVisible(false);
-        errorMessage.setBounds(66, 330, 300, 25);
+        errorMessage.setBounds(66, 350, 300, 25);
         panel.add(errorMessage);
 
-        JButton saveAndQuit = new JButton("Save and Quit");
-        saveAndQuit.setBounds(66, 355, 220, 25);
-        panel.add(saveAndQuit);
-        saveAndQuit.addActionListener(e ->
+        JButton quit = new JButton("Quit");
+        quit.setBounds(66, 325, 220, 25);
+        panel.add(quit);
+        /*
+        return to login page
+        */
+        quit.addActionListener(e ->
         {
             charStage = 1;
             try {
+                frame.dispose();
                 Login.login(character);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -164,94 +220,119 @@ public class CreateCharacter implements ActionListener
         JButton confirm = new JButton("Confirm");
         confirm.setBounds(66, 290, 220, 25);
         panel.add(confirm);
+        /*
+        when clicked save all entered values and create character object with those values
+        */
         confirm.addActionListener(e ->
         {
-            charName = enterName.getText();
-            selectedRace = RACES[selectRace.getSelectedIndex()];
-            chosenAlignment = ALIGNMENTS[selectAlignment.getSelectedIndex()];
-            charStage = 3;
+            charName = enterName.getText(); // name
+            chosenClass = selectClass.getText(); // class
+            selectedRace = RACES[selectRace.getSelectedIndex()]; //race
+            chosenAlignment = ALIGNMENTS[selectAlignment.getSelectedIndex()]; // alignment
+            charStage = 3; // signifies completed character
 
 
+            /*
+            error if no option is selected
+            */
             if (selectRace.getSelectedItem() == null)
             {
                 errorMessage.setText("Please complete all fields.");
                 errorMessage.setVisible(true);
             }
 
+            /*
+            error if no option is selected
+            */
             else if (selectAlignment.getSelectedItem() == null)
             {
                 errorMessage.setText("Please complete all fields.");
                 errorMessage.setVisible(true);
             }
-
+            
+            /*
+            error if no gender is chosen
+            */
             else if (chosenGender == 'a')
             {
                 errorMessage.setText("Please complete all fields.");
                 errorMessage.setVisible(true);
             }
 
+            /*
+            error if no class is entered
+            */
             else if (selectClass.getText().isEmpty())
             {
                 errorMessage.setText("Please complete all fields.");
                 errorMessage.setVisible(true);
             }
 
+            /*
+            error if no name is entered
+            */
             else if (enterName.getText().isEmpty())
             {
                 errorMessage.setText("Please complete all fields.");
                 errorMessage.setVisible(true);
             }
 
+            /*
+            error if no generation type is selected
+            */
             else if (generationType > 0)
             {
                 switch(generationType)
                 {
+                    /*
+                    easy generation
+                    */
                     case 1:
                     {
                         try {
+                            frame.dispose();
                             stats = StatAssignment.assignStats(Generate.easyDice(), account, character, selectedRace);
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
+                        break;
                     }
 
+                    /*
+                    med generation
+                    */
                     case 2:
                     {
                         try {
+                            frame.dispose();
                             stats = StatAssignment.assignStats(Generate.mediumDice(), account, character, selectedRace);
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
+                        break;
                     }
 
+                    /*
+                    hard generation
+                    */
                     case 3:
                     {
                         try {
+                            frame.dispose();
                             stats = StatAssignment.assignStats(Generate.hardDice(), account, character, selectedRace);
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
+                        break;
                     }
-
-                    character.setGender(chosenGender);
-                    character.setAlignment(chosenAlignment);
-                    character.setName(charName);
-                    character.setAge();
-                    character.setCharacterClass(chosenClass);
-                    character.setCharacterStage(3);
-
-
                 }
-
+                
+                character.setName(charName);
+                character.setGender(chosenGender);
+                character.setAlignment(chosenAlignment);
+                character.setCharacterClass(chosenClass);
             }
-
-
         });
-
-
-
-
-
     }
 
     @Override
